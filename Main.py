@@ -18,3 +18,26 @@ df_cleaned['Tax Before Promotions'] = df_cleaned['Tax Before Promotions'].astype
 df_cleaned['Total Promotions'] = df_cleaned['Total Promotions'].astype('float64')
 df_cleaned['Tax Charged'] = df_cleaned['Tax Charged'].astype('float64')
 df_cleaned['Total Charged'] = df_cleaned['Total Charged'].astype('float64')
+
+#Split Date input multiple columns
+
+df_cleaned['Order Date'] = pd.to_datetime(df_cleaned['Order Date'])
+df_cleaned['Order Year'] = df_cleaned['Order Date'].dt.year
+df_cleaned['Order Month'] = df_cleaned['Order Date'].dt.month
+df_cleaned['Order Day'] = df_cleaned['Order Date'].dt.day
+df_cleaned = df_cleaned.drop('Order Date',axis=1)
+newOrder = ['Order Year', 'Order Month','Order Day' ,'Order ID',
+        'Payment Instrument Type', 'Subtotal','Shipping Charge',
+        'Tax Before Promotions', 'Total Promotions','Tax Charged', 'Total Charged']
+
+df_cleaned = df_cleaned[newOrder]
+
+#print(df_cleaned)
+
+#Get list of all the unique years in the column
+yearsList = df_cleaned['Order Year'].value_counts().index.tolist()
+print(yearsList)
+#Yearly Spending
+df_yearlySpending = df_cleaned.groupby('Order Year').sum()
+df_yearlySpending.drop(['Order Month', 'Order Day', 'Subtotal', 'Shipping Charge', 'Tax Before Promotions',
+                        'Total Promotions', 'Tax Charged'], axis=1)
