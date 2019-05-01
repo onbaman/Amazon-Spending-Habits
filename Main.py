@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 pd.set_option('display.width', 400)
 pd.set_option('display.max_columns', 23)
@@ -41,3 +42,20 @@ print(yearsList)
 df_yearlySpending = df_cleaned.groupby('Order Year').sum()
 df_yearlySpending.drop(['Order Month', 'Order Day', 'Subtotal', 'Shipping Charge', 'Tax Before Promotions',
                         'Total Promotions', 'Tax Charged'], axis=1)
+
+
+ax = df_yearlySpending.plot(kind='bar')
+ax.set_title("Yearly Spending Habits")
+
+#Monthly Spending
+for i in range(len(yearsList)):
+    df_monthly = df_cleaned.loc[df_cleaned['Order Year'] == yearsList[i]]
+
+    df_monthlySpending = df_monthly.groupby('Order Month').sum()
+    df_monthlySpending = df_monthlySpending.drop(['Order Year', 'Order Day', 'Subtotal', 'Shipping Charge', 'Tax Before Promotions',
+                            'Total Promotions', 'Tax Charged'], axis=1)
+
+    ax = df_monthlySpending.plot(kind='bar')
+    ax.set_title( str(yearsList[i]) +  ' Monthly Spending')
+    ax = ax.plot(kind='bar', figsize=(10,4))
+    plt.show()
