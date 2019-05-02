@@ -59,3 +59,19 @@ for i in range(len(yearsList)):
     ax.set_title( str(yearsList[i]) +  ' Monthly Spending')
     ax = ax.plot(kind='bar', figsize=(10,4))
     plt.show()
+
+#daily Spending
+monthsList = []
+for i in range(len(yearsList)):
+    df_monthly = df_cleaned.loc[df_cleaned['Order Year'] == yearsList[i]]
+    monthsList = df_monthly['Order Month'].value_counts().index
+
+    for j in range(len(monthsList)):
+        df_daily = df_monthly.loc[df_monthly['Order Month'] == monthsList[j]].groupby("Order Day").sum()
+        df_daily = df_daily.drop(['Order Year', 'Order Month', 'Subtotal', 'Shipping Charge', 'Tax Before Promotions',
+                                  'Total Promotions', 'Tax Charged'], axis=1)
+
+        ax = df_daily.plot(kind='bar')
+        ax.set_title('Year' + str(yearsList[i]) + ' Month: ' + str(monthsList[j]) + ' Daily Spending')
+        ax = ax.plot(kind='bar', figsize=(20, 10))
+        plt.show()
