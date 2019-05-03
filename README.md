@@ -8,8 +8,6 @@ Requirements:
 
 - Pandas
 - Numpy
-- SciPy
-- SKLearn
 - Matplotlib
 - Seaborn
 
